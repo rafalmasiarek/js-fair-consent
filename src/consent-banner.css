@@ -1,4 +1,4 @@
-/* consent-analytics.css (v1.4.1) */
+/* consent-analytics.css (v1.4.3) */
 .consent-banner{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#0b1220;color:#e6f1ff;border-top:1px solid #15233b;display:none}
 .consent-banner.show{display:block}
 .consent-banner .container{max-width:1100px;margin:0 auto;padding:16px;display:flex;gap:16px;align-items:flex-start;justify-content:space-between}

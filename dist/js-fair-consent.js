@@ -1,4 +1,4 @@
-// consent-analytics.js (UMD) v1.4.1
+// consent-analytics.js (UMD) v1.4.3
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) define([], factory);
   else if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -6,7 +6,7 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  var VERSION = '1.4.1';
+  var VERSION = '1.4.3';
 
   // i18n strings
   var LOCALES = {

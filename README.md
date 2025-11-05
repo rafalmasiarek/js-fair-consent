@@ -29,8 +29,8 @@ If it helps you too, then maybe this project can be a small brick in building a 
 ## 🚀 Quick start (CDN)
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rafalmasiarek/js-fair-consent@v1.4.1/dist/js-fair-consent.css">
-<script defer src="https://cdn.jsdelivr.net/gh/rafalmasiarek/js-fair-consent@v1.4.1/dist/js-fair-consent.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rafalmasiarek/js-fair-consent@v1.4.3/dist/js-fair-consent.css">
+<script defer src="https://cdn.jsdelivr.net/gh/rafalmasiarek/js-fair-consent@v1.4.3/dist/js-fair-consent.js"></script>
 
 <div class="consent-banner">
   <div class="container">
@@ -153,7 +153,7 @@ ConsentAnalytics.trackPageView();   // manual SPA pageview tracking
 
 - GitHub: [https://github.com/rafalmasiarek/js-fair-consent//github.com/rafalmasiarek/consent-analytics)
 - CDN:  
-  `https://cdn.jsdelivr.net/gh/rafalmasiarek/js-fair-consent@v1.4.1/dist/js-fair-consent.js`
+  `https://cdn.jsdelivr.net/gh/rafalmasiarek/js-fair-consent@v1.4.3/dist/js-fair-consent.js`
 
 ---
 
