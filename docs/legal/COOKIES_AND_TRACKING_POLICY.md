@@ -1,6 +1,6 @@
 # Cookie and Tracking Policy
 
-_Last updated: 2025-11-05_
+_Last updated: YYYY-MM-DD_
 
 This website implements a privacy-first approach to analytics and tracking, compliant with the **EU GDPR**, the **ePrivacy Directive**, and guidance from the **EDPB** and **CNIL**.
 
