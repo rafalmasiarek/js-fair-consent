@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Consent Analytics – Policy Generator</title>
+  <link rel="stylesheet" href="../dist/js-fair-consent.css">
+  <style>
+    body {
+      font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+      background: #f6f8fa;
+      color: #0b1220;
+      margin: 0;
+      padding: 24px
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto
+    }
+
+    header {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 18px
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 22px
+    }
+
+    p.lead {
+      margin: 6px 0 0;
+      color: #667085;
+      font-size: 14px
+    }
+
+    .alert {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      padding: 14px;
+      border-radius: 10px;
+      margin: 12px 0;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .04)
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e6eef6;
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(11, 17, 32, 0.04)
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: 600;
+      font-size: 13px
+    }
+
+    .small {
+      font-size: 13px;
+      color: #667085;
+      margin-top: 6px
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #dbe7f2;
+      margin-top: 6px;
+      font-size: 14px
+    }
+
+    .checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 0;
+      background: #0ea5e9;
+      color: #fff;
+      cursor: pointer
+    }
+
+    .btn.secondary {
+      background: #eef2f7;
+      color: #0b1220
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px
+    }
+
+    pre {
+      white-space: pre-wrap;
+      background: #0b1220;
+      color: #cfeffc;
+      padding: 12px;
+      border-radius: 6px;
+      overflow: auto;
+      font-size: 13px
+    }
+
+    .muted {
+      color: #667085;
+      font-size: 13px
+    }
+
+    .tools-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px
+    }
+
+    .chip {
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: #f1f8fb;
+      border: 1px solid #e1eef5;
+      font-size: 13px
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: #667085;
+      font-size: 13px
+    }
+
+    @media (max-width:900px) {
+      .grid {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Consent Analytics – Policy Generator</h1>
+        <p class="lead">Generate GDPR/ePrivacy-friendly cookie & tracking policy text for your site – as Markdown or
+          HTML.</p>
+      </div>
+    </header>
+
+    <div class="alert">
+      <strong>Disclaimer.</strong> This project ships a ready-made, privacy‑first analytics loader:
+      <code>consent-analytics</code>. You can use it directly from GitHub (CDN) or via your build:
+      <ul>
+        <li>
+          GitHub:
+          <a href="https://github.com/rafalmasiarek/js-fair-consent" target="_blank" rel="noopener">
+            https://github.com/rafalmasiarek/js-fair-consent
+          </a>
+        </li>
+        <li>CDN (jsDelivr):
+          <code>https://cdn.jsdelivr.net/gh/rafalmasiarek/js-fair-consent@v1.4.1/dist/js-fair-consent.js</code>
+        </li>
+      </ul>
+      The library follows a conservative GDPR/ePrivacy/CNIL approach: anonymous/exempt pre-consent, full tracking only
+      after consent (Consent Mode v2 for GA4), optional Hotjar/marketing, GPC/DNT respected. Always review with your
+      legal counsel for your specific setup.
+    </div>
+
+    <div class="grid">
+      <div class="card" id="config">
+        <label>Contact email</label>
+        <input type="email" id="contactEmail" placeholder="privacy@example.com" value="privacy@example.com">
+
+        <label>Company / Data Controller</label>
+        <input type="text" id="companyName" placeholder="ACME Corp" value="ACME Corp">
+
+        <label>Processing partners / subprocessors (one per line)</label>
+        <textarea id="partners" rows="4" placeholder="Google LLC&#10;Hotjar Ltd&#10;Matomo GmbH"></textarea>
+        <div class="small">List third parties/processors that may receive or process data.</div>
+
+        <label style="margin-top:12px">Tools & Services</label>
+        <div class="checkboxes" id="tools">
+          <label><input type="checkbox" value="google" checked> Google Analytics 4 (GA4)</label>
+          <label><input type="checkbox" value="matomo" checked> Matomo (self-hosted)</label>
+          <label><input type="checkbox" value="umami" checked> Umami (cookieless)</label>
+          <label><input type="checkbox" value="hotjar"> Hotjar (heatmaps / recordings)</label>
+          <label><input type="checkbox" value="marketing"> Marketing trackers (ads, remarketing)</label>
+          <label><input type="checkbox" value="essential" checked> Essential cookies (auth, session)</label>
+        </div>
+
+        <label>Google behaviour</label>
+        <select id="googleMode">
+          <option value="preload">preload (Consent Mode v2: load gtag denied → upgrade after consent)</option>
+          <option value="consent-only" selected>consent-only (no requests before consent)</option>
+          <option value="disabled">disabled (never load GA)</option>
+        </select>
+
+        <label style="margin-top:10px">Pre-consent behavior for Matomo</label>
+        <select id="matomoMode">
+          <option value="cookieless" selected>cookieless / exempt (CNIL-style)</option>
+          <option value="disabled">disabled (no tracking before consent)</option>
+        </select>
+
+        <label style="margin-top:10px">Pre-consent behavior for Umami</label>
+        <select id="umamiMode">
+          <option value="anonymous" selected>anonymous (no cookies)</option>
+          <option value="disabled">disabled (none before consent)</option>
+        </select>
+
+        <label style="margin-top:10px">Output format</label>
+        <div class="row" style="margin-top:6px">
+          <select id="outFormat">
+            <option value="md">Markdown (recommended for repo)</option>
+            <option value="html">HTML (copy to website)</option>
+          </select>
+          <button class="btn" id="generateBtn">Generate</button>
+        </div>
+
+        <div class="actions">
+          <button class="btn secondary" id="previewBtn">Live Preview</button>
+          <button class="btn secondary" id="copyBtn">Copy to clipboard</button>
+          <button class="btn secondary" id="downloadBtn">Download</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <strong>Preview / Output</strong>
+            <div class="muted">Choose Markdown or HTML, then Generate. You can edit text before download.</div>
+          </div>
+          <div class="tools-list" id="currentTools"></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Title (editable)</label>
+          <input type="text" id="docTitle" value="Cookie and Tracking Policy">
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Generated content</label>
+          <textarea id="output" rows="18"
+            style="width:100%;padding:12px;border-radius:8px;border:1px solid #e6eef6;font-size:14px"></textarea>
+        </div>
+
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button class="btn" id="renderHtmlBtn">Render HTML below</button>
+        </div>
+
+        <div id="renderArea" style="margin-top:12px"></div>
+
+      </div>
+    </div>
+
+    <div class="footer">
+      This generator provides templated legal text. It does not replace legal advice — adapt wording to your
+      jurisdiction and consult your DPO or legal counsel before publishing.
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function el(id) { return document.getElementById(id) }
+      function listCheckedValues() {
+        var boxes = document.querySelectorAll('#tools input[type="checkbox"]');
+        var res = []; for (var i = 0; i < boxes.length; i++) { if (boxes[i].checked) res.push(boxes[i].value); } return res;
+      }
+      function sanitizeLines(txt) {
+        var arr = txt.split(/\r?\n/), out = []; for (var i = 0; i < arr.length; i++) { var s = arr[i].trim(); if (s) out.push(s); } return out;
+      }
+      function escapeHtml(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+      function formatPartnerList(partners, format) {
+        if (!partners || partners.length === 0) return '';
+        if (format === 'md') { return partners.map(function (p) { return '- ' + p; }).join('\n'); }
+        var li = ''; for (var i = 0; i < partners.length; i++) { li += '<li>' + escapeHtml(partners[i]) + '</li>'; } return '<ul>' + li + '</ul>';
+      }
+
+      function gatherOptions() {
+        return {
+          email: el('contactEmail').value || 'privacy@example.com',
+          company: el('companyName').value || 'Unknown',
+          partners: sanitizeLines(el('partners').value || ''),
+          tools: listCheckedValues(),
+          googleMode: el('googleMode').value,
+          matomoMode: el('matomoMode').value,
+          umamiMode: el('umamiMode').value,
+          title: el('docTitle').value || 'Cookie and Tracking Policy',
+          format: el('outFormat').value
+        };
+      }
+
+      function generateText(opts) {
+        var md = opts.format === 'md';
+        var out = [];
+
+        if (md) {
+          out.push('# ' + opts.title);
+          out.push('');
+          out.push('_Last updated: {{TODAY}}_'.replace('{{TODAY}}', new Date().toISOString().split('T')[0]));
+          out.push('');
+        } else {
+          out.push('<h1>' + escapeHtml(opts.title) + '</h1>');
+          out.push('<div><em>Last updated: ' + (new Date()).toISOString().split('T')[0] + '</em></div>');
+        }
+
+        var intro = "This website implements a privacy-first approach to analytics and tracking, compliant with the EU General Data Protection Regulation (GDPR) and the ePrivacy Directive. We only collect or store analytics data after you provide explicit consent through our cookie banner. Before consent, we operate in anonymous or restricted mode as described below.";
+        out.push(md ? intro + '\n' : '<p>' + escapeHtml(intro) + '</p>');
+
+        var ctrl = md ? ('**Data Controller:** ' + opts.company + '  \n**Contact:** ' + opts.email)
+          : ('<p><strong>Data Controller:</strong> ' + escapeHtml(opts.company) + '<br/><strong>Contact:</strong> <a href="mailto:' + escapeHtml(opts.email) + '">' + escapeHtml(opts.email) + '</a></p>');
+        out.push(ctrl);
+
+        if (md) {
+          out.push('## Tools and Services');
+          out.push('');
+          out.push('| Tool | Purpose | Consent required | Pre-consent mode |');
+          out.push('|---|---|---:|---|');
+        } else {
+          out.push('<h2>Tools and Services</h2>');
+          out.push('<table border="1" cellpadding="6" style="border-collapse:collapse"><thead><tr><th>Tool</th><th>Purpose</th><th>Consent required</th><th>Pre-consent mode</th></tr></thead><tbody>');
+        }
+
+        function row(tool, purpose, consent, pre) {
+          if (md) {
+            out.push('| **' + tool + '** | ' + purpose + ' | ' + (consent ? '✅' : 'No') + ' | ' + pre + ' |');
+          } else {
+            out.push('<tr><td><strong>' + escapeHtml(tool) + '</strong></td><td>' + escapeHtml(purpose) + '</td><td style="text-align:center">' + (consent ? '✅' : 'No') + '</td><td>' + escapeHtml(pre) + '</td></tr>');
+          }
+        }
+
+        function has(name) { return opts.tools.indexOf(name) !== -1; }
+
+        if (has('google')) {
+          var preG = (opts.googleMode === 'preload') ? 'Consent Mode v2 (denied — cookieless pings)'
+            : (opts.googleMode === 'consent-only') ? 'disabled before consent (no requests)'
+              : 'disabled (never loaded)';
+          row('Google Analytics 4 (GA4)', 'Audience measurement, traffic analytics', true, preG);
+        }
+        if (has('matomo')) {
+          var preM = (opts.matomoMode === 'cookieless') ? 'cookieless / limited (CNIL-style exempt)' : 'disabled before consent';
+          row('Matomo (self-hosted)', 'Audience measurement, event tracking (self-hosted)', !(opts.matomoMode === 'cookieless'), preM);
+        }
+        if (has('umami')) {
+          var preU = (opts.umamiMode === 'anonymous') ? 'anonymous/cookieless' : 'disabled before consent';
+          row('Umami', 'Lightweight, privacy-friendly analytics', false, preU);
+        }
+        if (has('hotjar')) row('Hotjar', 'Session recordings, heatmaps (UX)', true, 'not loaded before consent');
+        if (has('marketing')) row('Marketing trackers', 'Advertising, remarketing, profiling', true, 'not loaded before consent');
+        if (has('essential')) row('Essential cookies', 'Login sessions, security, preferences', false, 'always enabled (essential)');
+
+        if (!md) out.push('</tbody></table>');
+
+        var partnersHtmlOrMd = formatPartnerList(opts.partners, opts.format);
+
+        if (partnersHtmlOrMd && partnersHtmlOrMd.trim() !== '') {
+          if (md) {
+            out.push('');
+            out.push('## Subprocessors and Partners');
+            out.push('');
+            out.push(partnersHtmlOrMd);
+            out.push('');
+          } else {
+            out.push('<h2>Subprocessors and Partners</h2>' + partnersHtmlOrMd + '<br />');
+          }
+        }
+
+        var blocks = [];
+        if (md) {
+          blocks.push('### Anonymous and “exempt” analytics\nCertain analytics tools (e.g., Matomo, Umami) may operate without user consent if they do **not** track users across sites, use only first-party cookies or no cookies at all, do not share data with third parties, and collect data for strictly limited purposes (audience measurement). We configure these tools accordingly when enabled.');
+        } else {
+          blocks.push('<h3>Anonymous and “exempt” analytics</h3><p>Certain analytics tools (e.g., Matomo, Umami) may operate without user consent if they do <strong>not</strong> track users across sites, use only first-party cookies or no cookies at all, do not share data with third parties, and collect data for strictly limited purposes (audience measurement). We configure these tools accordingly when enabled.</p>');
+        }
+
+        if (has('google')) {
+          var gb_md = '### Google Analytics\nWe use Google Analytics 4 (GA4). GA4 is only activated as configured above. Under Consent Mode v2 with `analytics_storage=\'denied\'`, GA sets no analytics cookies and sends only cookieless pings until you consent. If set to **consent-only**, GA will not issue any requests before you accept.';
+          var gb_html = '<h3>Google Analytics</h3><p>We use Google Analytics 4 (GA4). GA4 is only activated as configured above. Under Consent Mode v2 with <code>analytics_storage=\'denied\'</code>, GA sets no analytics cookies and sends only cookieless pings until you consent. If set to <strong>consent-only</strong>, GA will not issue any requests before you accept.</p>';
+          blocks.push(md ? gb_md : gb_html);
+        }
+
+        if (has('hotjar') || has('marketing')) {
+          var lines = [];
+          if (has('hotjar')) lines.push('Hotjar (session recordings, heatmaps) is enabled only after explicit consent.');
+          if (has('marketing')) lines.push('Marketing trackers (advertising/remarketing) are enabled only after explicit consent and may result in cross-site tracking.');
+          blocks.push(md ? '### Marketing and UX tracking\n' + lines.join('\n\n') : '<h3>Marketing and UX tracking</h3><p>' + lines.join('</p><p>') + '</p>');
+        }
+
+        if (md) {
+          blocks.push('### Withdrawal of consent\nYou may withdraw or change your consent at any time by clearing cookies, using your browser settings, or clicking the relevant option in our cookie banner. After withdrawal, tracking scripts will be disabled on reload.');
+          blocks.push('### Your rights\nYou have the right to access, correct, or delete your personal data, object to processing, and lodge a complaint with a supervisory authority.');
+          blocks.push('### Legal references\n- GDPR (Regulation (EU) 2016/679)\n- ePrivacy Directive (2002/58/EC)\n- EDPB Guidelines on consent\n- CNIL guidance on analytics');
+        } else {
+          blocks.push('<h3>Withdrawal of consent</h3><p>You may withdraw or change your consent at any time by clearing cookies, using your browser settings, or clicking the relevant option in our cookie banner. After withdrawal, tracking scripts will be disabled on reload.</p>');
+          blocks.push('<h3>Your rights</h3><p>You have the right to access, correct, or delete your personal data, object to processing, and lodge a complaint with a supervisory authority.</p>');
+          blocks.push('<h3>Legal references</h3><ul><li>GDPR (Regulation (EU) 2016/679)</li><li>ePrivacy Directive (2002/58/EC)</li><li>EDPB Guidelines on consent</li><li>CNIL guidance on analytics</li></ul>');
+        }
+
+        out.push(md ? blocks.join('\n\n') : blocks.join(''));
+        return md ? out.join('\n') : out.join('');
+      }
+
+      function refreshCurrentTools() {
+        var tools = listCheckedValues();
+        var box = document.getElementById('currentTools');
+        box.innerHTML = '';
+        for (var i = 0; i < tools.length; i++) {
+          var c = document.createElement('span'); c.className = 'chip'; c.textContent = tools[i]; box.appendChild(c);
+        }
+      }
+
+      function renderOutput() {
+        var opts = gatherOptions();
+        var txt = generateText(opts);
+        document.getElementById('output').value = txt;
+        var render = document.getElementById('renderArea');
+        if (opts.format === 'md') { render.innerHTML = '<pre>' + escapeHtml(txt) + '</pre>'; }
+        else { render.innerHTML = txt; }
+        refreshCurrentTools();
+      }
+
+      document.getElementById('generateBtn').addEventListener('click', renderOutput);
+      document.getElementById('previewBtn').addEventListener('click', renderOutput);
+      document.getElementById('copyBtn').addEventListener('click', function () {
+        try { navigator.clipboard.writeText(document.getElementById('output').value); alert('Copied to clipboard'); }
+        catch (e) { alert('Copy failed — select and copy manually.'); }
+      });
+      document.getElementById('downloadBtn').addEventListener('click', function () {
+        var opts = gatherOptions();
+        var name = (opts.title || 'policy').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        var blob = new Blob([document.getElementById('output').value], { type: opts.format === 'md' ? 'text/markdown' : 'text/html' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a'); a.href = url; a.download = name + (opts.format === 'md' ? '.md' : '.html');
+        document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      });
+      document.getElementById('renderHtmlBtn').addEventListener('click', function () {
+        var opts = gatherOptions();
+        var txt = document.getElementById('output').value;
+        var render = document.getElementById('renderArea');
+        if (opts.format === 'md') { render.innerHTML = '<pre>' + escapeHtml(txt) + '</pre>'; }
+        else { render.innerHTML = txt; }
+      });
+
+      refreshCurrentTools();
+      renderOutput();
+    })();
+  </script>
+</body>
+
+</html>

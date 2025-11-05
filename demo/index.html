@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consent Analytics Demo</title>
+  <link rel="stylesheet" href="../dist/js-fair-consent.css">
+  <script defer src="../dist/js-fair-consent.js"></script>
+</head>
+
+<body>
+  <main style="max-width:800px;margin:3rem auto;font-family:system-ui,Segoe UI,Roboto,Arial">
+    <h1>Demo</h1>
+    <p>This page demonstrates the consent banner and asynchronous loaders.</p>
+    <p>
+      <button id="btnReset"
+        onclick="ConsentAnalytics.eraseCookie('allowCookies'); document.querySelector('.consent-banner').classList.add('show');">Reset
+        demo (show banner)</button>
+    </p>
+  </main>
+
+  <div class="consent-banner">
+    <div class="container">
+      <div>
+        <h4 class="consent-title" data-i18n-key="title">Cookies & Analytics</h4>
+        <p class="consent-text" data-i18n-key="body">We use essential cookies and privacy-friendly analytics. With
+          consent, we enable additional tools.</p>
+      </div>
+      <div class="consent-actions">
+        <button class="consent-btn" id="btnDeny"><span data-i18n-key="deny">Deny</span></button>
+        <button class="consent-btn primary" id="btnAccept"><span data-i18n-key="accept">Accept</span></button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      ConsentAnalytics.init({
+        locale: 'en',
+        services: {
+          granulate: { enabled: true },
+          google: { enabled: true, gtagId: 'G-XXXXXXX', mode: 'consent-only' },
+          umami: { enabled: true, websiteId: 'YOUR-UMAMI-ID', src: 'https://umami.is/a/script.js' },
+          matomo: { enabled: false },
+          hotjar: { enabled: false }
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "js-fair-consent",
+  "version": "1.4.1",
+  "license": "MIT",
+  "description": "Honest, GDPR-compliant consent manager for privacy-friendly analytics.",
+  "exports": {
+    ".": {
+      "import": "./dist/js-fair-consent.min.js",
+      "require": "./dist/js-fair-consent.js"
+    },
+    "./css": "./dist/js-fair-consent.css"
+  },
+  "scripts": {
+    "clean": "rm -rf dist && mkdir -p dist",
+    "build:js": "cp src/consent-analytics.js dist/js-fair-consent.js",
+    "build:css": "cp src/consent-banner.css dist/js-fair-consent.css",
+    "build": "npm run clean && npm run build:js && npm run build:css",
+    "build:min:js": "esbuild src/consent-analytics.js --format=iife --global-name=ConsentAnalytics --minify --legal-comments=none --outfile=dist/js-fair-consent.min.js",
+    "build:min:css": "lightningcss --minify --bundle --input src/consent-banner.css --output dist/js-fair-consent.min.css",
+    "build:min": "npm run clean && npm run build:min:js && npm run build:min:css"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "lightningcss-cli": "^1.25.1"
+  }
+}
