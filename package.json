@@ -20,7 +20,7 @@
     "build:min": "npm run build && npm run build:min:js && npm run build:min:css"
   },
   "devDependencies": {
-    "esbuild": "^0.25.12",
+    "esbuild": "^0.27.2",
     "lightningcss-cli": "^1.25.1"
   }
 }
